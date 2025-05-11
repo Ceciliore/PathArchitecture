@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         tableName: 'comentarios',
-        timestamps: true
+        timestamps: false
     });
 
     Comentario.associate = (models) => {
@@ -35,10 +35,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'idPalestra',
             as: 'palestra'
         });
-        Comentario.belongsTo(models.Presenca, {
-            foreignKey: 'idPresenca',
-            as: 'presenca'
-        });
+        // Comentario.belongsTo(models.Presenca, {
+        //     foreignKey: 'idPresenca',
+        //     as: 'presenca'
+        // });
     };
 
     return Comentario;
