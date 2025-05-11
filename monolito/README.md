@@ -9,7 +9,7 @@ Este projeto é um sistema completo para gerenciamento de palestras escolares, d
 
 ---
 
-## ⚙️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - Node.js + Express
 - React (SPA servida pelo Express)
@@ -27,3 +27,5 @@ Este projeto é um sistema completo para gerenciamento de palestras escolares, d
 ```bash
 git clone https://github.com/seu-usuario/seu-projeto.git
 cd path-architecture-api/monolito
+npm run seed
+```
