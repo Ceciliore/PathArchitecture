@@ -1,6 +1,5 @@
 const Presenca = require('../models/presenca.model')
 
-// Get
 exports.listarPresencas = async (req, res) => {
     try {
         const presencas = await Presenca.findAll()
@@ -11,7 +10,6 @@ exports.listarPresencas = async (req, res) => {
     }
 };
 
-// Post
 exports.criarPresenca = async (req, res) => {
     try {
         const { idUsuario, idPalestra } = req.body
