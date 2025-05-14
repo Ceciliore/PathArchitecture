@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  palestra-db:
+    image: postgres:15
+    container_name: palestra-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: palestra_database
+    ports:
+      - "5436:5432"
+    volumes:
+      - palestra_data:/var/lib/postgresql/data
+
+  palestra-service:
+    build: .
+    container_name: palestra-service
+    environment:
+      PSQL_HOST: palestra-db
+      PSQL_PORT: 5432
+      PSQL_NAME: palestra_database
+      PSQL_USER: dudu_adm
+      PSQL_PASS: morango
+    ports:
+      - "3003:3003"
+    depends_on:
+      - palestra-db
+
+volumes:
+  palestra_data:
