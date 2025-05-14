@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  comentario-db:
+    image: postgres:15
+    container_name: comentario-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: comentario_database
+    ports:
+      - "5437:5432"
+    volumes:
+      - comentario_data:/var/lib/postgresql/data
+
+  comentario-service:
+    build: .
+    container_name: comentario-service
+    environment:
+      PSQL_HOST: comentario-db
+      PSQL_PORT: 5432
+      PSQL_NAME: comentario_database
+      PSQL_USER: dudu_adm
+      PSQL_PASS: morango
+    ports:
+      - "3004:3004"
+    depends_on:
+      - comentario-db
+
+volumes:
+  comentario_data:
