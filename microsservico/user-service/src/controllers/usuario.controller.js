@@ -1,4 +1,8 @@
 const Usuario = require('../models/usuario.model');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 exports.listarUsuarios = async (req, res) => {
     try {
@@ -24,5 +28,35 @@ exports.criarUsuario = async (req, res) => {
         res.status(201).json(novoUsuario);
     } catch (error) {
         res.status(500).json({ erro: 'Erro ao criar usuário', detalhes: error.message });
+    }
+};
+
+exports.login = async (req, res) => {
+    try {
+        const { identificador, senha } = req.body;
+
+        const usuario = await Usuario.findOne({
+            where: {
+                [Usuario.sequelize.Op.or]: [
+                    { email: identificador },
+                    { matricula: identificador }
+                ]
+            }
+        });
+
+        if (!usuario) return res.status(401).json({ erro: 'Usuário não encontrado' });
+
+        const senhaValida = await bcrypt.compare(senha, usuario.senha);
+        if (!senhaValida) return res.status(401).json({ erro: 'Senha inválida' });
+
+        const token = jwt.sign(
+            { id: usuario.id, nome: usuario.nome, email: usuario.email },
+            JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.json({ mensagem: 'Login bem-sucedido', token });
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro ao fazer login', detalhes: error.message });
     }
 };

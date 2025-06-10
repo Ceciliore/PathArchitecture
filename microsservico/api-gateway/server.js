@@ -9,6 +9,7 @@ app.get('/', (req, res) => {
     res.send('API Gateway está rodando');
 });
 
+// COMENTARIO SERVICE
 app.use('/api/usuarios', createProxyMiddleware({
     target: 'http://user-service:3001',
     changeOrigin: true,
@@ -17,6 +18,8 @@ app.use('/api/usuarios', createProxyMiddleware({
     },
 }));
 
+
+// COMENTARIO SERVICE
 app.use('/api/perfis', createProxyMiddleware({
     target: 'http://perfil-service:3002',
     changeOrigin: true,
@@ -25,6 +28,8 @@ app.use('/api/perfis', createProxyMiddleware({
     },
 }));
 
+
+// COMENTARIO SERVICE
 app.use('/api/palestras', createProxyMiddleware({
     target: 'http://palestra-service:3003',
     changeOrigin: true,
@@ -33,6 +38,7 @@ app.use('/api/palestras', createProxyMiddleware({
     },
 }));
 
+// COMENTARIO SERVICE
 app.use('/api/comentarios', createProxyMiddleware({
     target: 'http://comentario-service:3004',
     changeOrigin: true,
@@ -41,6 +47,8 @@ app.use('/api/comentarios', createProxyMiddleware({
     },
 }));
 
+
+// COMENTARIO SERVICE
 app.use('/api/presencas', createProxyMiddleware({
     target: 'http://presenca-service:3005',
     changeOrigin: true,
