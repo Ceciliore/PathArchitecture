@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_monolito_angular
+    restart: always
+    environment:
+      POSTGRES_DB: path_architecture_database
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+    ports:
+      - "5481:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: monolito_angular_app
+    depends_on:
+      - db
+    environment:
+      PSQL_HOST: db
+      PSQL_PORT: 5432
+      PSQL_NAME: path_architecture_database
+      PSQL_USER: dudu_adm
+      PSQL_PASS: morango
+    ports:
+      - "3000:3000"
+    command: sh -c "node seed.js && node server.js"
+
+volumes:
+  postgres_data:

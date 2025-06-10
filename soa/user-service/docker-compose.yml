@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+    user-db:
+        image: postgres:15
+        container_name: user-db
+        environment:
+            POSTGRES_USER: dudu_adm
+            POSTGRES_PASSWORD: morango
+            POSTGRES_DB: user_database
+        ports:
+            - "5422:5432"
+        volumes:
+            - user_data:/var/lib/postgresql/data
+
+    user-service:
+        build: .
+        container_name: user-service
+        environment:
+            PSQL_HOST: user-db
+            PSQL_PORT: 5432
+            PSQL_NAME: user_database
+            PSQL_USER: dudu_adm
+            PSQL_PASS: morango
+        ports:
+            - "3001:3001"
+        depends_on:
+            - user-db
+
+volumes:
+    user_data:

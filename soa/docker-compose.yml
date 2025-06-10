@@ -1,0 +1,126 @@
+version: '3.8'
+
+networks:
+  micro_net:
+
+volumes:
+  user_data:
+  perfil_data:
+  palestra_data:
+  comentario_data:
+  presenca_data:
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "3333:3333"
+    environment:
+      USER_SERVICE: http://user-service:3001
+      PERFIL_SERVICE: http://perfil-service:3002
+      PALESTRA_SERVICE: http://palestra-service:3003
+      COMENTARIO_SERVICE: http://comentario-service:3004
+      PRESENCA_SERVICE: http://presenca-service:3005
+    networks:
+      - micro_net
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    networks:
+      - micro_net
+
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: user_database
+    volumes:
+      - user_data:/var/lib/postgresql/data
+    networks:
+      - micro_net
+
+  perfil-service:
+    build: ./perfil-service
+    container_name: perfil-service
+    ports:
+      - "3002:3002"
+    networks:
+      - micro_net
+
+  perfil-db:
+    image: postgres:15
+    container_name: perfil-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: perfil_database
+    volumes:
+      - perfil_data:/var/lib/postgresql/data
+    networks:
+      - micro_net
+
+  palestra-service:
+    build: ./palestra-service
+    container_name: palestra-service
+    ports:
+      - "3003:3003"
+    networks:
+      - micro_net
+
+  palestra-db:
+    image: postgres:15
+    container_name: palestra-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: palestra_database
+    volumes:
+      - palestra_data:/var/lib/postgresql/data
+    networks:
+      - micro_net
+
+  comentario-service:
+    build: ./comentario-service
+    container_name: comentario-service
+    ports:
+      - "3004:3004"
+    networks:
+      - micro_net
+
+  comentario-db:
+    image: postgres:15
+    container_name: comentario-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: comentario_database
+    volumes:
+      - comentario_data:/var/lib/postgresql/data
+    networks:
+      - micro_net
+
+  presenca-service:
+    build: ./presenca-service
+    container_name: presenca-service
+    ports:
+      - "3005:3005"
+    networks:
+      - micro_net
+
+  presenca-db:
+    image: postgres:15
+    container_name: presenca-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: presenca_database
+    volumes:
+      - presenca_data:/var/lib/postgresql/data
+    networks:
+      - micro_net

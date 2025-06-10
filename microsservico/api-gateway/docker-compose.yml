@@ -1,0 +1,36 @@
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3001"
+
+  perfil-service:
+    build: ./perfil-service
+    ports:
+      - "3002:3002"
+
+  palestra-service:
+    build: ./palestra-service
+    ports:
+      - "3003:3003"
+
+  comentario-service:
+    build: ./comentario-service
+    ports:
+      - "3004:3004"
+
+  presenca-service:
+    build: ./presenca-service
+    ports:
+      - "3005:3005"
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3333:3333"
+    depends_on:
+      - user-service
+      - perfil-service
+      - palestra-service
+      - comentario-service
+      - presenca-service

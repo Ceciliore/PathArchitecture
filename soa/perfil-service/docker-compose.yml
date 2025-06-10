@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  perfil-db:
+    image: postgres:15
+    container_name: perfil-db
+    environment:
+      POSTGRES_USER: dudu_adm
+      POSTGRES_PASSWORD: morango
+      POSTGRES_DB: perfil_database
+    ports:
+      - "5435:5432"
+    volumes:
+      - perfil_data:/var/lib/postgresql/data
+
+  perfil-service:
+    build: .
+    container_name: perfil-service
+    environment:
+      PSQL_HOST: perfil-db
+      PSQL_PORT: 5432
+      PSQL_NAME: perfil_database
+      PSQL_USER: dudu_adm
+      PSQL_PASS: morango
+    ports:
+      - "3002:3002"
+    depends_on:
+      - perfil-db
+
+volumes:
+  perfil_data:

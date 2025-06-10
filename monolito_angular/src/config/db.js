@@ -9,7 +9,10 @@ const sequelize = new Sequelize(
         host: process.env.PSQL_HOST,
         port: process.env.PSQL_PORT,
         dialect: 'postgres',
-        logging: false
+        logging: false,
+        retry: {
+            max: 10,
+        }
     }
 );
 
