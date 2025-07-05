@@ -1,4 +1,6 @@
-const Usuario = require('../models/usuario.model');
+const db = require('../models')
+const Usuario = db.Usuario
+const Perfil = db.Perfil
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -6,7 +8,9 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 exports.listarUsuarios = async (req, res) => {
     try {
-        const usuarios = await Usuario.findAll();
+        const usuarios = await Usuario.findAll({
+            include: { model: Perfil, as: 'perfil' }
+        });
         res.json(usuarios);
     } catch (error) {
         res.status(500).json({ erro: 'Erro ao buscar usuários' });
@@ -37,7 +41,7 @@ exports.login = async (req, res) => {
 
         const usuario = await Usuario.findOne({
             where: {
-                [Usuario.sequelize.Op.or]: [
+                [db.Sequelize.Op.or]: [
                     { email: identificador },
                     { matricula: identificador }
                 ]

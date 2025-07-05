@@ -6,6 +6,6 @@ router.get('/', controller.listarUsuarios);
 
 router.post('/', controller.criarUsuario);
 
-router.post('/login', controller.login)
+router.patch('/', controller.loginUsuario)
 
 module.exports = router;
