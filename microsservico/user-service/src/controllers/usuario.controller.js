@@ -31,7 +31,7 @@ exports.criarUsuario = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.loginUsuario = async (req, res) => {
     try {
         const { identificador, senha } = req.body;
 
@@ -43,6 +43,8 @@ exports.login = async (req, res) => {
                 ]
             }
         });
+
+        console.log('morango')
 
         if (!usuario) return res.status(401).json({ erro: 'Usuário não encontrado' });
 

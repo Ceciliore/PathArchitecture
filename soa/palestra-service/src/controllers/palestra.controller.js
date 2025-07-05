@@ -1,4 +1,5 @@
-const Palestra = require('../models/palestra.model');
+const db = require('../models');
+const Palestra = db.Palestra;
 
 // GET /palestras
 exports.listarPalestras = async (req, res) => {
