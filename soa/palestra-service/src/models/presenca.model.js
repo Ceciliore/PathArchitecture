@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        nomeUsuario: { // denormalização
+        nomeUsuario: {
             type: DataTypes.STRING,
             allowNull: false
         },
