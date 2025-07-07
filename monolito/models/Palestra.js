@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         titulo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         palestrante: {
             type: DataTypes.STRING,
