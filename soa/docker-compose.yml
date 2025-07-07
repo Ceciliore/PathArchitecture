@@ -1,40 +1,59 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:15
-    container_name: postgres_soa
-    restart: always
+    container_name: db
     environment:
       POSTGRES_DB: hub_academico
       POSTGRES_USER: dudu_adm
       POSTGRES_PASSWORD: morango
-    ports:
-      - "5439:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5424:5432"
+    networks:
+      - soa-network
 
   user-service:
-    build: ./user-service
-    container_name: user_service
-    restart: always
-    env_file:
-      - ./user-service/.env
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
     ports:
       - "3001:3001"
+    env_file:
+      - ./user-service/.env
     depends_on:
       - db
+    networks:
+      - soa-network
 
   palestra-service:
-    build: ./palestra-service
-    container_name: palestra_service
-    restart: always
+    build:
+      context: ./palestra-service
+      dockerfile: Dockerfile
+    container_name: palestra-service
+    ports:
+      - "3002:3002"
     env_file:
       - ./palestra-service/.env
-    ports:
-      - "3333:3002"
     depends_on:
       - db
+    networks:
+      - soa-network
+
+  esb-service:
+    build:
+      context: ./esb-service
+      dockerfile: Dockerfile
+    container_name: esb-service
+    ports:
+      - "8000:8000"
+    networks:
+      - soa-network
 
 volumes:
-  pgdata:
+  postgres_data:
+
+networks:
+  soa-network:
+    driver: bridge

@@ -1,0 +1,210 @@
+<definitions name="ESBService"
+    targetNamespace="http://example.com/esb"
+    xmlns:tns="http://example.com/esb"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+    <!-- USUÁRIO -->
+    <message name="criarUsuarioRequest">
+        <part name="nome" type="xsd:string" />
+        <part name="email" type="xsd:string" />
+        <part name="senha" type="xsd:string" />
+        <part name="idPerfil" type="xsd:int" />
+    </message>
+    <message name="criarUsuarioResponse">
+        <part name="status" type="xsd:string" />
+    </message>
+
+    <message name="listarUsuariosRequest" />
+    <message name="listarUsuariosResponse">
+        <part name="resultado" type="xsd:string" />
+    </message>
+
+    <message name="listarPerfisRequest" />
+    <message name="listarPerfisResponse">
+        <part name="resultado" type="xsd:string" />
+    </message>
+
+    <message name="criarPalestraRequest">
+        <part name="titulo" type="xsd:string" />
+        <part name="descricao" type="xsd:string" />
+        <part name="data" type="xsd:string" />
+    </message>
+    <message name="criarPalestraResponse">
+        <part name="status" type="xsd:string" />
+    </message>
+
+    <message name="listarPalestrasRequest">
+        <part name="input" type="xsd:anyType" />
+    </message>
+    <message name="listarPalestrasResponse">
+        <part name="resultado" type="xsd:string" />
+    </message>
+
+    <!-- PRESENÇA -->
+    <message name="registrarPresencaRequest">
+        <part name="idUsuario" type="xsd:int" />
+        <part name="idPalestra" type="xsd:int" />
+    </message>
+    <message name="registrarPresencaResponse">
+        <part name="status" type="xsd:string" />
+    </message>
+
+    <!-- COMENTÁRIO -->
+    <message name="criarComentarioRequest">
+        <part name="texto" type="xsd:string" />
+        <part name="idUsuario" type="xsd:int" />
+        <part name="idPalestra" type="xsd:int" />
+    </message>
+    <message name="criarComentarioResponse">
+        <part name="status" type="xsd:string" />
+    </message>
+
+    <message name="listarComentariosRequest" />
+    <message name="listarComentariosResponse">
+        <part name="resultado" type="xsd:string" />
+    </message>
+
+    <portType name="ESBPortType">
+        <operation name="criarUsuario">
+            <input message="tns:criarUsuarioRequest" />
+            <output message="tns:criarUsuarioResponse" />
+        </operation>
+        <operation name="listarUsuarios">
+            <input message="tns:listarUsuariosRequest" />
+            <output message="tns:listarUsuariosResponse" />
+        </operation>
+        <operation name="listarPerfis">
+            <input message="tns:listarPerfisRequest" />
+            <output message="tns:listarPerfisResponse" />
+        </operation>
+        <operation name="criarPalestra">
+            <input message="tns:criarPalestraRequest" />
+            <output message="tns:criarPalestraResponse" />
+        </operation>
+        <operation name="listarPalestras">
+            <input message="tns:listarPalestrasRequest" />
+            <output message="tns:listarPalestrasResponse" />
+        </operation>
+        <operation name="registrarPresenca">
+            <input message="tns:registrarPresencaRequest" />
+            <output message="tns:registrarPresencaResponse" />
+        </operation>
+        <operation name="criarComentario">
+            <input message="tns:criarComentarioRequest" />
+            <output message="tns:criarComentarioResponse" />
+        </operation>
+        <operation name="listarComentarios">
+            <input message="tns:listarComentariosRequest" />
+            <output message="tns:listarComentariosResponse" />
+        </operation>
+    </portType>
+
+    <binding name="ESBBinding" type="tns:ESBPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+
+        <operation name="criarUsuario">
+            <soap:operation soapAction="urn:criarUsuario" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="listarUsuarios">
+            <soap:operation soapAction="urn:listarUsuarios" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="listarPerfis">
+            <soap:operation soapAction="urn:listarPerfis" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="criarPalestra">
+            <soap:operation soapAction="urn:criarPalestra" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="listarPalestras">
+            <soap:operation soapAction="urn:listarPalestras" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="registrarPresenca">
+            <soap:operation soapAction="urn:registrarPresenca" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="criarComentario">
+            <soap:operation soapAction="urn:criarComentario" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+
+        <operation name="listarComentarios">
+            <soap:operation soapAction="urn:listarComentarios" />
+            <input>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:esb"
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+
+    <service name="ESBService">
+        <port name="ESBServiceSoapPort" binding="tns:ESBBinding">
+            <soap:address location="http://localhost:8000/esb" />
+        </port>
+    </service>
+</definitions>

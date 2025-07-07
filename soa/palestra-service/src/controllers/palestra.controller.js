@@ -1,7 +1,6 @@
 const db = require('../models');
 const Palestra = db.Palestra;
 
-// GET /palestras
 exports.listarPalestras = async (req, res) => {
     try {
         const palestras = await Palestra.findAll();
@@ -12,7 +11,6 @@ exports.listarPalestras = async (req, res) => {
     }
 };
 
-// POST /palestras
 exports.criarPalestra = async (req, res) => {
     try {
         console.log(req.body)
