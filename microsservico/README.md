@@ -1,11 +1,6 @@
 
 <div class="corpo" align="center"> 
 
-<img src="./markdown/logo_md.png" width="450px" height="200px">
-
-![GitHub language count](https://img.shields.io/github/languages/count/seu-usuario/microsservico?color=D46162)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/y/seu-usuario/microsservico?color=D46162)
-
 </div>
 
 ## Visão Geral
@@ -27,23 +22,55 @@ Este repositório contém a versão da aplicação de gestão de palestras escol
 
 ```
 microsservico/
-┣ user-service/
-┃ ┣ src/
-┃ ┃ ┣ controllers/
-┃ ┃ ┣ models/
-┃ ┃ ┗ routes/
+┣ api-gateway/                          # Gateway central de requisições REST
+┃ ┣ server.js                           # Redireciona chamadas para os serviços corretos
+┃ ┗ dockerfile                          # Dockerfile do gateway
+┣ comentario-service/                   # Serviço responsável por comentários
+┃ ┣ comentario.controller.js
+┃ ┣ comentario.model.js
+┃ ┣ comentario.routes.js
+┃ ┣ comentario.service.js
 ┃ ┣ server.js
-┣ palestra-service/
-┃ ┣ src/
-┃ ┃ ┣ controllers/
-┃ ┃ ┣ models/
-┃ ┃ ┗ routes/
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js                       # Conexão com banco próprio
+┣ palestra-service/                     # Serviço de palestras
+┃ ┣ palestra.controller.js
+┃ ┣ palestra.model.js
+┃ ┣ palestra.routes.js
+┃ ┣ palestra.service.js
 ┃ ┣ server.js
-┣ gateway/
-┃ ┣ src/
-┃ ┃ ┗ routes/
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ perfil-service/                       # Serviço de perfis
+┃ ┣ perfil.controller.js
+┃ ┣ perfil.model.js
+┃ ┣ perfil.routes.js
+┃ ┣ perfil.service.js
 ┃ ┣ server.js
-┣ docker-compose.yml
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ presenca-service/                     # Serviço de presenças
+┃ ┣ presenca.controller.js
+┃ ┣ presenca.model.js
+┃ ┣ presenca.routes.js
+┃ ┣ presenca.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ user-service/                         # Serviço de usuários
+┃ ┣ usuario.controller.js
+┃ ┣ usuario.model.js
+┃ ┣ usuario.routes.js
+┃ ┣ usuario.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ docker-compose.yml 
 ```
 
 ---
