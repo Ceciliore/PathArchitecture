@@ -4,7 +4,7 @@ const db = require('./models');
 const { swaggerUi, swaggerSpec } = require('./swagger');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3333;
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
