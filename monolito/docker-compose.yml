@@ -26,7 +26,7 @@ services:
       PSQL_USER: dudu_adm
       PSQL_PASS: morango
     ports:
-      - "3000:3000"
+      - "3333:3333"
     command: sh -c "node seed.js && node server.js"
 
 volumes:
