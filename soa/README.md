@@ -1,11 +1,6 @@
 
 <div class="corpo" align="center"> 
 
-<img src="./markdown/logo_md.png" width="450px" height="200px">
-
-![GitHub language count](https://img.shields.io/github/languages/count/seu-usuario/soa?color=D46162)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/y/seu-usuario/soa?color=D46162)
-
 </div>
 
 ## Visão Geral

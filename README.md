@@ -1,11 +1,6 @@
 
 <div align="center"> 
 
-<img src="./markdown/logo_md.png" width="450px" height="200px">
-
-![GitHub repo size](https://img.shields.io/github/repo-size/seu-usuario/path-architecture-api?color=D46162)
-![GitHub last commit](https://img.shields.io/github/last-commit/seu-usuario/path-architecture-api?color=D46162)
-
 </div>
 
 # Projeto Path Architecture API
