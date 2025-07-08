@@ -23,7 +23,7 @@ Este repositório contém a implementação de uma aplicação de palestras esco
 ## Sobre o Projeto
 
 - **Tecnologias Base**: Node.js, Express, Sequelize, PostgreSQL, Docker.
-- **Documentação**: Swagger (REST) e WSDL (SOAP).
+- **Documentação**: Swagger.
 - **Frontend**: Aplicação em React/TypeScript integrada com todas as versões.
 - **Objetivo**: Comparar arquiteturas utilizando um mesmo domínio de aplicação, avaliando organização, escalabilidade, acoplamento e integração.
 
@@ -37,4 +37,4 @@ Cada modelo possui seu próprio `README.md` com instruções detalhadas para exe
 
 ## Conclusão
 
-Este repositório é parte do Trabalho de Conclusão de Curso (TCC) desenvolvido no CEFET/RJ. Ele serve como base prática e técnica para demonstrar a evolução arquitetural de aplicações web, destacando vantagens, desafios e particularidades de cada abordagem estudada.
+Este repositório é parte do Trabalho de Conclusão de Curso (TCC) desenvolvido no CEFET/RJ. Ele serve como base prática e técnica para demonstrar a evolução arquitetural de aplicações, destacando vantagens, desafios e particularidades de cada abordagem estudada.
