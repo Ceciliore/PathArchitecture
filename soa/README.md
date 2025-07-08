@@ -27,22 +27,59 @@ Este repositório contém a versão da aplicação de gestão de palestras escol
 
 ```
 soa/
-┣ user-service/
-┃ ┣ controllers/
-┃ ┣ models/
-┃ ┗ server.js
-┣ palestra-service/
-┃ ┣ controllers/
-┃ ┣ models/
-┃ ┗ server.js
-┣ comentario-service/
-┣ presenca-service/
-┣ esb/
-┃ ┣ esb.wsdl
-┃ ┗ server.js
-┣ rest-to-soap/
-┃ ┗ index.js
-┣ docker-compose.yml
+┣ esb/                                  # Enterprise Service Bus (barramento central SOAP)
+┃ ┣ esb.wsdl                            # Contrato WSDL com definição dos serviços
+┃ ┣ server.js                           # Processa requisições SOAP/XML
+┃ ┗ dockerfile                          # Dockerfile do ESB
+┣ middleware/                           # Middleware REST → SOAP para integrar com o front
+┃ ┣ rest-to-soap.js                     # Converte chamadas REST/JSON em SOAP/XML
+┃ ┗ dockerfile                          # Dockerfile do middleware
+┣ comentario-service/                   # Serviço de comentários (SOAP)
+┃ ┣ comentario.controller.js
+┃ ┣ comentario.model.js
+┃ ┣ comentario.routes.js
+┃ ┣ comentario.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ palestra-service/                     # Serviço de palestras (SOAP)
+┃ ┣ palestra.controller.js
+┃ ┣ palestra.model.js
+┃ ┣ palestra.routes.js
+┃ ┣ palestra.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ perfil-service/                       # Serviço de perfis (SOAP)
+┃ ┣ perfil.controller.js
+┃ ┣ perfil.model.js
+┃ ┣ perfil.routes.js
+┃ ┣ perfil.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ presenca-service/                     # Serviço de presenças (SOAP)
+┃ ┣ presenca.controller.js
+┃ ┣ presenca.model.js
+┃ ┣ presenca.routes.js
+┃ ┣ presenca.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ user-service/                         # Serviço de usuários (SOAP)
+┃ ┣ usuario.controller.js
+┃ ┣ usuario.model.js
+┃ ┣ usuario.routes.js
+┃ ┣ usuario.service.js
+┃ ┣ server.js
+┃ ┣ dockerfile
+┃ ┗ config/
+┃   ┗ database.js
+┣ docker-compose.yml                   # Orquestração completa dos serviços + ESB + middleware + banco
 ```
 
 ---

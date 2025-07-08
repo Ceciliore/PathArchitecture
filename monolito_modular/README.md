@@ -1,91 +1,122 @@
 
-<div class="corpo" align="center"> 
-
-<img src="./markdown/logo_md.png" width="450px" height="200px">
-
-![GitHub language count](https://img.shields.io/github/languages/count/seu-usuario/monolito_modular?color=D46162)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/y/seu-usuario/monolito_modular?color=D46162)
-
-</div>
-
 ## Visão Geral
 
-Este repositório contém a versão monolítica com frontend desacoplado, onde a aplicação backend foi construída em Node.js com Express, e o frontend foi desenvolvido separadamente e incorporado via pasta `build/`. Essa versão mantém a simplicidade da arquitetura monolítica, mas separa as responsabilidades de frontend e backend em camadas distintas.
+Este repositório contém a implementação da **arquitetura monolítica modular** para a aplicação de gerenciamento de palestras. Trata-se de uma evolução da arquitetura monolítica tradicional, mantendo o **deploy unificado**, mas introduzindo uma **organização interna por domínios funcionais** (como `usuario`, `palestra`, `comentario`, etc.), com separação clara entre modelos, serviços, controladores e rotas dentro de cada módulo.
+
+Além disso, o **frontend foi desacoplado** e construído separadamente (com React ou Angular), sendo incorporado via pasta `build/` no backend. Essa divisão respeita o princípio da separação de responsabilidades e prepara o projeto para futuras evoluções arquiteturais, como a migração para microsserviços.
 
 ---
 
 ## Arquitetura
 
 - Linguagem: JavaScript
-- Framework: Node.js + Express
-- Frontend: Web estático (Angular ou React compilado)
+- Backend: Node.js + Express
+- Organização modular por domínio
+- Frontend: React/Angular (compilado e servido pela pasta `/build`)
 - Banco de Dados: PostgreSQL
 - ORM: Sequelize
 - Autenticação: Em desenvolvimento
 - Documentação: Swagger (em breve)
-- Hospedagem: Docker + Render (ou outro)
+- Hospedagem: Docker + Render
+
+### Estrutura modular de exemplo
 
 ```
 monolito_modular/
-┣ build/
-┃ ┣ index.html
-┃ ┣ favicon.ico
-┃ ┗ ...
-┣ models/
-┃ ┣ Comentario.js
-┃ ┣ Palestra.js
-┃ ┣ Perfil.js
-┃ ┣ Presenca.js
-┃ ┣ Usuario.js
-┣ server.js
-┣ dockerfile
-┣ docker-compose.yml
+┣ build/                         # Frontend React compilado (via npm run build)
+┣ modules/                       # Módulos organizados por domínio funcional
+┃ ┣ comentario/
+┃ ┃ ┣ comentario.controller.js   # Controlador HTTP
+┃ ┃ ┣ comentario.model.js        # Modelo Sequelize
+┃ ┃ ┣ comentario.routes.js       # Rotas REST
+┃ ┃ ┗ comentario.service.js      # Regras de negócio
+┃ ┣ palestra/
+┃ ┃ ┣ palestra.controller.js
+┃ ┃ ┣ palestra.model.js
+┃ ┃ ┣ palestra.routes.js
+┃ ┃ ┗ palestra.service.js
+┃ ┣ perfil/
+┃ ┃ ┣ perfil.controller.js
+┃ ┃ ┣ perfil.model.js
+┃ ┃ ┣ perfil.routes.js
+┃ ┃ ┗ perfil.service.js
+┃ ┣ presenca/
+┃ ┃ ┣ presenca.controller.js
+┃ ┃ ┣ presenca.model.js
+┃ ┃ ┣ presenca.routes.js
+┃ ┃ ┗ presenca.service.js
+┃ ┗ usuario/
+┃ ┃ ┣ usuario.controller.js
+┃ ┃ ┣ usuario.model.js
+┃ ┃ ┣ usuario.routes.js
+┃ ┃ ┗ usuario.service.js
+┣ config/
+┃ ┗ database.js                 # Configuração da conexão com PostgreSQL
+┣ routes/
+┃ ┗ index.js                    # Importa e registra as rotas dos módulos
+┣ .env                          # Variáveis de ambiente (porta, DB, usuário, senha)
+┣ docker-compose.yml           # Orquestração dos containers (app + banco)
+┣ dockerfile                    # Build da imagem Docker da aplicação
+┣ package.json
+┣ server.js                     # Ponto de entrada principal da API
+┣ seed.js                       # População inicial do banco com dados de exemplo
 ```
+
+---
+
+## Diferenciais da Arquitetura Modular
+
+- Organização por domínios e não por tipo de arquivo
+- Cada domínio com seus próprios controladores, modelos, serviços e rotas
+- Maior legibilidade e manutenção facilitada
+- Prepara o projeto para futura migração a microsserviços
+- Evita o acoplamento típico do monólito tradicional
 
 ---
 
 ## API REST
 
-### Palestras
-- POST /api/palestras - Criar palestra
-- GET /api/palestras - Listar palestras
+### Exemplo: Palestras
+- `POST /api/palestras` – Criar palestra
+- `GET /api/palestras` – Listar palestras
 
 ### [Outros endpoints]
-(Adicionar conforme forem implementados)
+(Adicionar conforme a implementação)
 
 ---
 
 ## Banco de Dados
 
-O banco PostgreSQL armazena as entidades:
+O PostgreSQL armazena as seguintes entidades:
 
-- usuarios
-- perfis
-- palestras
-- comentarios
-- presencas
+- Usuario
+- Perfil
+- Palestra
+- Comentario
+- Presenca
 
-Modelos definidos em `models/` com Sequelize.
+Modelos definidos nos módulos correspondentes utilizando Sequelize.
 
 ---
 
 ## Documentação (Swagger)
 
-A documentação Swagger será disponibilizada em breve em:
+Será disponibilizada em:
 
+```
 http://localhost:3333/api-docs
+```
 
 ---
 
 ## Como Rodar Localmente
 
-1. Clone o repositório:
 ```bash
 git clone https://github.com/seu-usuario/monolito_modular.git
 cd monolito_modular
 ```
 
-2. Configure o arquivo `.env` (se aplicável):
+Crie um arquivo `.env` com os parâmetros:
 
 ```env
 DB_USER=postgres
@@ -94,18 +125,16 @@ DB_NAME=monolito_db
 DB_HOST=localhost
 ```
 
-3. Suba os containers com Docker:
+E execute:
+
 ```bash
 docker-compose up --build
 ```
 
-4. Acesse a aplicação:
-```bash
-http://localhost:3333
-```
+A aplicação estará disponível em `http://localhost:3333`
 
 ---
 
 ## Conclusão
 
-Este projeto representa uma variação da arquitetura monolítica com separação visual de responsabilidades, facilitando o desenvolvimento modular e comparações com arquiteturas mais distribuídas como microsserviços e SOA.
+Esta arquitetura modulariza internamente uma aplicação monolítica, segmentando responsabilidades por domínios funcionais. Com isso, garante maior escalabilidade, clareza de código e viabiliza uma transição mais segura para arquiteturas distribuídas como microsserviços ou SOA.
