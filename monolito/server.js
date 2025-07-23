@@ -1,22 +1,23 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 const db = require('./models');
 const { swaggerUi, swaggerSpec } = require('./swagger');
 
 const app = express();
 const PORT = process.env.PORT || 3333;
 
+app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-db.sequelize.sync({ alter: true });
-
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
+app.get('/', (_req, res) =>
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+);
 
 /**
  * @swagger
@@ -30,12 +31,12 @@ app.get('/', (req, res) => {
  *       500:
  *         description: Erro ao buscar usuários.
  */
-app.get('/api/usuarios', async (req, res) => {
+app.get('/api/usuarios', async (_req, res) => {
     try {
         const usuarios = await db.Usuario.findAll();
         res.json(usuarios);
-    } catch (error) {
-        res.status(500).json({ erro: 'Erro ao buscar usuários' });
+    } catch (err) {
+        res.status(500).json({ erro: 'Erro ao buscar usuários', detalhes: err.message });
     }
 });
 
@@ -77,22 +78,21 @@ app.get('/api/usuarios', async (req, res) => {
 app.post('/api/usuarios', async (req, res) => {
     try {
         const { nome, matricula, email, senha, idPerfil } = req.body;
+        const senhaHash = await bcrypt.hash(senha, 10);
 
         const novoUsuario = await db.Usuario.create({
             nome,
             matricula,
             email,
-            senha,
-            idPerfil
+            senha: senhaHash,
+            idPerfil,
         });
 
         res.status(201).json(novoUsuario);
-    } catch (error) {
-        res.status(500).json({ erro: 'Erro ao criar usuário', detalhes: error.message });
+    } catch (err) {
+        res.status(500).json({ erro: 'Erro ao criar usuário', detalhes: err.message });
     }
 });
-
-
 
 /**
  * @swagger
@@ -112,7 +112,6 @@ app.post('/api/usuarios', async (req, res) => {
  *             properties:
  *               identificador:
  *                 type: string
- *                 description: Email ou matrícula do usuário
  *               senha:
  *                 type: string
  *     responses:
@@ -123,37 +122,39 @@ app.post('/api/usuarios', async (req, res) => {
  *       500:
  *         description: Erro ao fazer login.
  */
-app.post('/api/usuarios/login', async (req, res) => {
+app.patch('/api/usuarios', async (req, res) => {
     try {
         const { identificador, senha } = req.body;
 
         const usuario = await db.Usuario.findOne({
             where: {
-                [db.Sequelize.Op.or]: [
+                [Op.or]: [
                     { email: identificador },
                     { matricula: identificador }
                 ]
             }
         });
 
-        console.log('morango');
-
-        if (!usuario) return res.status(401).json({ erro: 'Usuário não encontrado' });
+        if (!usuario) {
+            return res.status(401).json({ erro: 'Usuário não encontrado' });
+        }
 
         const senhaValida = await bcrypt.compare(senha, usuario.senha);
-        if (!senhaValida) return res.status(401).json({ erro: 'Senha inválida' });
+        if (!senhaValida) {
+            return res.status(401).json({ erro: 'Senha inválida' });
+        }
+        const { id, nome, email, matricula, idPerfil } = usuario;
 
-        const token = jwt.sign(
-            { id: usuario.id, nome: usuario.nome, email: usuario.email },
-            JWT_SECRET,
-            { expiresIn: '1d' }
-        );
+        return res.json({
+            mensagem: 'Login bem-sucedido',
+            usuario: { id, nome, email, matricula, idPerfil }
+        });
 
-        res.json({ mensagem: 'Login bem-sucedido', token });
     } catch (error) {
-        res.status(500).json({ erro: 'Erro ao fazer login', detalhes: error.message });
+        return res.status(400).json({ erro: 'Erro ao fazer login', detalhes: error.message });
     }
 });
+
 
 /**
  * @swagger
@@ -188,7 +189,6 @@ app.post('/api/palestras', async (req, res) => {
         const novaPalestra = await db.Palestra.create(req.body);
         res.status(201).json(novaPalestra);
     } catch (error) {
-        console.error('Erro ao criar palestra:', error);
         res.status(500).json({ mensagem: 'Erro interno' });
     }
 });
@@ -203,12 +203,11 @@ app.post('/api/palestras', async (req, res) => {
  *       200:
  *         description: Lista de palestras
  */
-app.get('/api/palestras', async (req, res) => {
+app.get('/api/palestras', async (_req, res) => {
     try {
         const palestras = await db.Palestra.findAll();
         res.json(palestras);
     } catch (error) {
-        console.error('Erro ao listar palestras:', error);
         res.status(500).json({ mensagem: 'Erro interno' });
     }
 });
@@ -243,15 +242,44 @@ app.post('/api/presencas', async (req, res) => {
         const novaPresenca = await db.Presenca.create({
             idUsuario,
             idPalestra,
-            path_certificado
+            path_certificado,
         });
 
         res.status(201).json(novaPresenca);
     } catch (error) {
-        console.error('Erro ao registrar presença:', error);
         res.status(500).json({ mensagem: 'Erro ao registrar presença' });
     }
 });
+
+/**
+ * @swagger
+ * /api/presencas:
+ *   get:
+ *     summary: Lista todas as presenças
+ *     tags: [Presenças]
+ *     responses:
+ *       200:
+ *         description: Lista de presenças retornada com sucesso.
+ *       500:
+ *         description: Erro ao buscar presenças.
+ */
+app.get('/api/presencas', async (req, res) => {
+    try {
+        const presencas = await db.Presenca.findAll({
+            include: [
+                { model: db.Usuario, attributes: ['id', 'nome', 'email', 'matricula'] },
+                { model: db.Palestra, attributes: ['id', 'titulo', 'data', 'horario'] }
+            ],
+            order: [['dataHora', 'ASC']],
+        });
+
+        res.json(presencas);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao buscar presenças', detalhes: error.message });
+    }
+});
+
+
 
 /**
  * @swagger
@@ -287,12 +315,11 @@ app.post('/api/comentarios', async (req, res) => {
             conteudo,
             idUsuario,
             idPalestra,
-            idPresenca: idPresenca || null
+            idPresenca: idPresenca || null,
         });
 
         res.status(201).json(novoComentario);
     } catch (error) {
-        console.error('Erro ao salvar comentário:', error);
         res.status(500).json({ mensagem: 'Erro ao salvar comentário' });
     }
 });
@@ -314,26 +341,24 @@ app.post('/api/comentarios', async (req, res) => {
  *       200:
  *         description: Lista de comentários
  */
-app.get('/api/comentarios', async (req, res) => {
-    const { palestra } = req.query;
-
+app.get('/api/comentarios', async (_req, res) => {
     try {
         const comentarios = await db.Comentario.findAll({
-            where: { idPalestra: palestra },
-            include: [{
-                model: db.Usuario,
-                attributes: ['id', 'nome']
-            }],
-            order: [['createdAt', 'ASC']]
+            include: [
+                { model: db.Usuario, attributes: ['id', 'nome'] },
+                { model: db.Palestra, attributes: ['id', 'titulo'] }
+            ],
+            order: [['createdAt', 'ASC']],
         });
 
         res.json(comentarios);
     } catch (error) {
-        console.error('Erro ao listar comentários:', error);
-        res.status(500).json({ mensagem: 'Erro ao buscar comentários' });
+        console.error('Erro ao buscar comentários:', error);
+        res.status(500).json({ mensagem: 'Erro ao buscar comentários', detalhes: error.message });
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+
+db.sequelize.sync({ alter: true }).then(() => {
+    app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));
 });

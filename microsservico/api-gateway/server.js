@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     res.send('API Gateway está rodando');
 });
 
-// COMENTARIO SERVICE
+
 app.use('/api/usuarios', createProxyMiddleware({
     target: 'http://user-service:3001',
     changeOrigin: true,
