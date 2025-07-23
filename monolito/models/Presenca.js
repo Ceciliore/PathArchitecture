@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         path_certificado: {
             type: DataTypes.STRING
+        },
+        dataHora: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
         }
     }, {
         tableName: 'presencas',

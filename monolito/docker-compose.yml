@@ -27,7 +27,7 @@ services:
       PSQL_PASS: morango
     ports:
       - "3333:3333"
-    command: sh -c "node seed.js && node server.js"
+    command: sh -c "node server.js"
 
 volumes:
   postgres_data:

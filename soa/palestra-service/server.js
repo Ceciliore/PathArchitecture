@@ -14,9 +14,9 @@ app.use('/api/comentarios', require('./src/routes/comentario.routes'));
 app.use('/api/presencas', require('./src/routes/presenca.routes'));
 
 db.sequelize.sync().then(() => {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Palestra Service rodando na porta ${PORT}`);
-  });
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Palestra Service rodando na porta ${PORT}`);
+    });
 }).catch((error) => {
-  console.error('Erro ao conectar ao banco:', error);
+    console.error('Erro ao conectar ao banco:', error);
 });
